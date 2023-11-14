@@ -68,6 +68,7 @@ const settingBrandLinux = async (req, res, next) => {
         let setting_ssl = await sshConn.execCommand(`sudo certbot --nginx -d ${brand?.dns}`,);
 
     } catch (err) {
+        console.log(err)
         return response(req, res, -200, "서버 에러 발생", false)
     }
 };
