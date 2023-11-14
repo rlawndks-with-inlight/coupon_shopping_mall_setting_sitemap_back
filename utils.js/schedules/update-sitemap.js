@@ -1,9 +1,21 @@
 import { pool } from "../../config/db.js";
 import { returnMoment } from "../function.js";
 import fs from "fs";
+import { NodeSSH } from 'node-ssh'
+import 'dotenv/config';
+
+const ssh2 = new NodeSSH();
 
 const updateSiteMap = async () => {
   try {
+    const sshConn = await ssh2.connect({
+      host: process.env.HOST,
+      username: 'root',
+      port: '22',
+      password: process.env.DB_PASSWORD,
+      readyTimeout: 1800
+    });
+
     let brands = await pool.query(`SELECT * FROM brands WHERE is_delete=0`);
     brands = brands?.result;
 
@@ -39,10 +51,10 @@ const updateSiteMap = async () => {
         }
       );
     }
+    let setting = await sshConn.execCommand(`cd /root/front && npm run deploy`,);
   } catch (err) {
     console.log(err);
   }
-
 };
 
 export default updateSiteMap;

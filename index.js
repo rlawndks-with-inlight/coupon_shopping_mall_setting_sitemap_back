@@ -67,7 +67,6 @@ if (process.env.NODE_ENV == "development") {
     console.log("**-------------------------------------**");
     console.log(`====      Server is On ${HTTPS_PORT}...!!!    ====`);
     console.log("**-------------------------------------**");
-    updateSiteMap();
     scheduleIndex();
   });
 }
