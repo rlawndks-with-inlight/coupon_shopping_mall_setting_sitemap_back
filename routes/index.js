@@ -55,16 +55,17 @@ const settingBrandLinux = async (req, res, next) => {
             }   
         `
         let wirte_nginx_setting = await fs.writeFileSync(
-            "/etc/nginx/sitemap.xml",
+            `/etc/nginx/sites-enabled/${brand?.dns}`,
             nginx_text,
             "utf8",
             function (error) {
                 console.log("write end");
             }
         );
+        return response(req, res, 100, "success", {});
+
         let setting_ssl = await sshConn.execCommand(`sudo certbot --nginx -d ${brand?.dns}`,);
 
-        return response(req, res, 100, "success", {});
     } catch (err) {
         return response(req, res, -200, "서버 에러 발생", false)
     }
