@@ -63,7 +63,6 @@ const settingBrandLinux = async (req, res, next) => {
                 console.log("write end");
             }
         );
-        console.log(wirte_nginx_setting)
         let setting_ssl = await sshConn.execCommand(`sudo certbot --nginx -d ${brand?.dns}`,);
         let nginx_start = await sshConn.execCommand(`service nginx restart`,);
         return response(req, res, 100, "success", {});
@@ -73,6 +72,21 @@ const settingBrandLinux = async (req, res, next) => {
         return response(req, res, -200, "서버 에러 발생", false)
     }
 };
+const getSettingCheckList = async (req, res, next) => {
+    try {
+        let brands = await pool.query('SELECT * FROM brands');
+        brands = brands?.result;
+        let letsencrypt_files = fs.readdirSync('/etc/letsencrypt/live');
+        let nginx_files = fs.readdirSync('/etc/nginx/sites-enabled');
+        console.log(letsencrypt_files)
+        console.log(nginx_files)
 
+        return response(req, res, 100, "success", {});
+    } catch (err) {
+        console.log(err)
+        return response(req, res, -200, "서버 에러 발생", false)
+    }
+}
 router.post("/setting-linux", settingBrandLinux);
+router.get("/setting-check-list", getSettingCheckList);
 export default router;

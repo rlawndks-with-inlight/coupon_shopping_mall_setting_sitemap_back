@@ -15,7 +15,7 @@ const updateSiteMap = async () => {
     sitemap += `<url><loc>${url}</loc><lastmod>${date}</lastmod>\n</url>\n`;
     sitemap += `</urlset>`;
     fs.writeFileSync(
-      "../../front/public/sitemap.xml",
+      `../../front/public/sitemap-${brand?.id}.xml`,
       data,
       "utf8",
       function (error) {
