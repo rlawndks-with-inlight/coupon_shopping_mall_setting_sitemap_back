@@ -81,7 +81,10 @@ const getSettingCheckList = async (req, res, next) => {
         console.log(letsencrypt_files)
         console.log(nginx_files)
 
-        return response(req, res, 100, "success", {});
+        return response(req, res, 100, "success", {
+            letsencrypt_files,
+            nginx_files,
+        });
     } catch (err) {
         console.log(err)
         return response(req, res, -200, "서버 에러 발생", false)
