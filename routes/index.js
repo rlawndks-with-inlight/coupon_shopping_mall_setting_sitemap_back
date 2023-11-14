@@ -62,6 +62,7 @@ const settingBrandLinux = async (req, res, next) => {
                 console.log("write end");
             }
         );
+        console.log(wirte_nginx_setting)
         return response(req, res, 100, "success", {});
 
         let setting_ssl = await sshConn.execCommand(`sudo certbot --nginx -d ${brand?.dns}`,);
