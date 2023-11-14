@@ -78,8 +78,6 @@ const getSettingCheckList = async (req, res, next) => {
         brands = brands?.result;
         let letsencrypt_files = fs.readdirSync('/etc/letsencrypt/live');
         let nginx_files = fs.readdirSync('/etc/nginx/sites-enabled');
-        console.log(letsencrypt_files)
-        console.log(nginx_files)
 
         return response(req, res, 100, "success", {
             letsencrypt_files,
