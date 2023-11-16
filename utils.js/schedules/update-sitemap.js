@@ -48,7 +48,7 @@ const updateSiteMap = async () => {
         }
         sitemap += `</urlset>`;
         fs.writeFileSync(
-          `/root/front/public/sitemap-${brand?.id}${k == 0 ? '' : `-${k}`}.xml`,
+          `/root/front/public/sitemap-${brand?.id}${j == 0 ? '' : `-${j}`}.xml`,
           sitemap,
           "utf8",
           function (error) {
