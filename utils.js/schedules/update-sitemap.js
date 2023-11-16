@@ -30,6 +30,7 @@ const updateSiteMap = async () => {
       let url = `https://${brand?.dns}`;
 
       let sitemap_list = [];
+      sitemap_list.push(url);
       let product_list = products.filter(item => item?.brand_id == brand?.id);
       let post_list = posts.filter(item => item?.brand_id == brand?.id);
       for (var j = 0; j < product_list.length; j++) {
@@ -42,7 +43,6 @@ const updateSiteMap = async () => {
         let sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
         sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">`;
         let sitemap_content = sitemap_list.slice(j * 30000, (j + 1) * 30000);
-        sitemap += `<url><loc>${url}</loc><lastmod>${date}</lastmod>\n</url>\n`
         for (var k = 0; k < sitemap_content.length; k++) {
           sitemap += `<url><loc>${sitemap_content[k]}</loc><lastmod>${date}</lastmod>\n</url>\n`
         }
