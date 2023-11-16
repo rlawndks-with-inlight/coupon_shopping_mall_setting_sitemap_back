@@ -39,16 +39,16 @@ const updateSiteMap = async () => {
       for (var j = 0; j < post_list.length; j++) {
         sitemap_list.push(`${url}/shop/service/${post_list[j]?.category_id}/${post_list[j]?.id}`)
       }
-      for (var i = 0; i < sitemap_list.length / 30000; i++) {
+      for (var j = 0; j < sitemap_list.length / 30000; j++) {
         let sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
         sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">`;
-        let sitemap_content = sitemap_list.slice(i * 30000, (i + 1) * 30000);
-        for (var j = 0; j < sitemap_content.length; j++) {
-          sitemap += `<url><loc>${sitemap_content[j]}</loc><lastmod>${date}</lastmod>\n</url>\n`
+        let sitemap_content = sitemap_list.slice(j * 30000, (j + 1) * 30000);
+        for (var k = 0; k < sitemap_content.length; k++) {
+          sitemap += `<url><loc>${sitemap_content[k]}</loc><lastmod>${date}</lastmod>\n</url>\n`
         }
         sitemap += `</urlset>`;
         fs.writeFileSync(
-          `/root/front/public/sitemap-${brand?.id}${i == 0 ? '' : `-${i}`}.xml`,
+          `/root/front/public/sitemap-${brand?.id}${k == 0 ? '' : `-${k}`}.xml`,
           sitemap,
           "utf8",
           function (error) {
