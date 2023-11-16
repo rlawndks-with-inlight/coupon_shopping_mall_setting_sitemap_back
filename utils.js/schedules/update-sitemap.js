@@ -28,26 +28,35 @@ const updateSiteMap = async () => {
     for (var i = 0; i < brands.length; i++) {
       let brand = brands[i];
       let url = `https://${brand?.dns}`;
-      let sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
-      sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">`;
-      sitemap += `<url><loc>${url}</loc><lastmod>${date}</lastmod>\n</url>\n`;
+
+      let sitemap_list = [];
+      sitemap_list.push(url);
       let product_list = products.filter(item => item?.brand_id == brand?.id);
       let post_list = posts.filter(item => item?.brand_id == brand?.id);
       for (var j = 0; j < product_list.length; j++) {
-        sitemap += `<url><loc>${url}/shop/item/${product_list[j]?.id}</loc><lastmod>${date}</lastmod>\n</url>\n`;
+        sitemap_list.push(`${url}/shop/item/${product_list[j]?.id}`)
       }
       for (var j = 0; j < post_list.length; j++) {
-        sitemap += `<url><loc>${url}/shop/service/${post_list[j]?.category_id}/${post_list[j]?.id}</loc><lastmod>${date}</lastmod>\n</url>\n`;
+        sitemap_list.push(`${url}/shop/service/${post_list[j]?.category_id}/${post_list[j]?.id}`)
       }
-      sitemap += `</urlset>`;
-      fs.writeFileSync(
-        `/root/front/public/sitemap-${brand?.id}.xml`,
-        sitemap,
-        "utf8",
-        function (error) {
-          console.log("write end");
+      for (var i = 0; i < sitemap_list.length / 30000; i++) {
+        let sitemap = '<?xml version="1.0" encoding="UTF-8"?>';
+        sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">`;
+        let sitemap_content = sitemap_list.slice(i * 30000, (i + 1) * 30000);
+        for (var j = 0; j < sitemap_content.length; j++) {
+          sitemap += `<url><loc>${sitemap_content[j]}</loc><lastmod>${date}</lastmod>\n</url>\n`
         }
-      );
+        sitemap += `</urlset>`;
+        fs.writeFileSync(
+          `/root/front/public/sitemap-${brand?.id}${i == 0 ? '' : `-${i}`}.xml`,
+          sitemap,
+          "utf8",
+          function (error) {
+            console.log("write end");
+          }
+        );
+      }
+
     }
     let setting = await sshConn.execCommand(`cd /root/front && npm run deploy`,);
   } catch (err) {
