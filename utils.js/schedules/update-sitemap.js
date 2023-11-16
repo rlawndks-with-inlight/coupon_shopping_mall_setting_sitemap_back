@@ -19,7 +19,7 @@ const updateSiteMap = async () => {
     let brands = await pool.query(`SELECT * FROM brands WHERE is_delete=0`);
     brands = brands?.result;
 
-    let posts = await pool.query(`SELECT posts.id, posts.category_id, post_categories.brand_id FROM posts LEFT JOIN post_categories ON posts.category_id=post_categories.id WHERE posts.is_delete=0 `);
+    let posts = await pool.query(`SELECT posts.id, posts.category_id, post_categories.brand_id FROM posts LEFT JOIN post_categories ON posts.category_id=post_categories.id WHERE posts.is_delete=0 AND post_categories.post_category_read_type=0 `);
     posts = posts?.result;
     let products = await pool.query(`SELECT id, brand_id FROM products WHERE products.is_delete=0 `);
     products = products?.result;
@@ -33,8 +33,6 @@ const updateSiteMap = async () => {
       sitemap += `<url><loc>${url}</loc><lastmod>${date}</lastmod>\n</url>\n`;
       let product_list = products.filter(item => item?.brand_id == brand?.id);
       let post_list = posts.filter(item => item?.brand_id == brand?.id);
-      console.log(product_list)
-      console.log(post_list)
       for (var j = 0; j < product_list.length; j++) {
         sitemap += `<url><loc>${url}/shop/item/${product_list[j]?.id}</loc><lastmod>${date}</lastmod>\n</url>\n`;
       }
